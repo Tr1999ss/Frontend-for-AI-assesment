@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Knowledge Console</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%235b5bd6'/><rect x='11' y='11' width='10' height='10' rx='3' fill='white' transform='rotate(45 16 16)'/></svg>" />
+    <script>
+      // Apply saved appearance before first paint so there is no light/dark flash.
+      // Mirrors ThemeProvider; keys come from theme/themes.ts and lib/storage.ts.
+      try {
+        var t = JSON.parse(localStorage.getItem('kb.theme') || '{}')
+        var m = t.mode || 'system'
+        if (m === 'system') m = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        var r = document.documentElement
+        r.dataset.theme = m
+        r.style.colorScheme = m
+        if (t.density) r.dataset.density = t.density
+        if (t.radius) r.dataset.radius = t.radius
+        if (t.font) r.dataset.font = t.font
+        if (t.motion) r.dataset.motion = t.motion
+        if (t.accent) r.style.setProperty('--accent', t.accent)
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

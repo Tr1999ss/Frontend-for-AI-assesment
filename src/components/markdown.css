@@ -1,0 +1,21 @@
+.markdown { line-height: 1.7; overflow-wrap: anywhere; }
+.markdown > :first-child { margin-top: 0; }
+.markdown > :last-child { margin-bottom: 0; }
+.markdown p, .markdown ul, .markdown ol, .markdown pre, .markdown blockquote, .markdown table { margin: 0 0 0.75em; }
+.markdown h1, .markdown h2, .markdown h3, .markdown h4 { margin: 1.2em 0 0.5em; font-size: 1.05em; }
+.markdown ul, .markdown ol { padding-left: 1.4em; }
+.markdown li + li { margin-top: 0.25em; }
+.markdown code {
+  padding: 1px 5px;
+  border-radius: var(--radius-xs);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  font-size: 0.86em;
+}
+.markdown pre { padding: var(--space-3); border-radius: var(--radius-md); background: var(--surface-sunken); border: 1px solid var(--border); overflow-x: auto; }
+.markdown pre code { padding: 0; border: none; background: none; }
+.markdown blockquote { padding-left: var(--space-3); border-left: 3px solid var(--accent-border); color: var(--text-2); }
+.markdown table { border-collapse: collapse; font-size: 0.94em; }
+.markdown th, .markdown td { padding: 6px 10px; border: 1px solid var(--border); }
+.markdown th { background: var(--surface-2); }
+.markdown a { text-underline-offset: 3px; }

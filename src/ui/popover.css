@@ -1,0 +1,17 @@
+.popover-anchor { position: relative; display: inline-flex; }
+.popover {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 8px);
+  min-width: 240px;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+  transform-origin: top right;
+  animation: popover-in var(--dur-2) var(--ease-out);
+}
+.popover-end { right: 0; }
+.popover-start { left: 0; transform-origin: top left; }
+@keyframes popover-in { from { opacity: 0; transform: translateY(-4px) scale(0.97); } }

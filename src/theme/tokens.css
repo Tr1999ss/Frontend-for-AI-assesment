@@ -1,0 +1,166 @@
+/*
+ * Design tokens. Components use only these semantic variables, never raw colors, so:
+ *  - a new theme = another [data-theme] block,
+ *  - a new density / radius / font option = another data-* block,
+ *  - the accent is a single runtime variable; every accent shade below derives from it.
+ */
+
+:root {
+  /* typography */
+  --font-inter: 'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-system: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  --font-sans: var(--font-inter);
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.875rem;
+  --text-md: 0.9375rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+
+  /* spacing (scaled by density) */
+  --density: 1;
+  --space-1: calc(0.25rem * var(--density));
+  --space-2: calc(0.5rem * var(--density));
+  --space-3: calc(0.75rem * var(--density));
+  --space-4: calc(1rem * var(--density));
+  --space-5: calc(1.25rem * var(--density));
+  --space-6: calc(1.5rem * var(--density));
+  --space-7: calc(2rem * var(--density));
+  --space-8: calc(2.5rem * var(--density));
+  --control-h-sm: calc(1.75rem * var(--density));
+  --control-h: calc(2.25rem * var(--density));
+  --control-h-lg: calc(2.75rem * var(--density));
+
+  /* radius */
+  --radius-scale: 1;
+  --radius-xs: calc(4px * var(--radius-scale));
+  --radius-sm: calc(6px * var(--radius-scale));
+  --radius-md: calc(8px * var(--radius-scale));
+  --radius-lg: calc(12px * var(--radius-scale));
+  --radius-xl: calc(16px * var(--radius-scale));
+  --radius-full: 999px;
+
+  /* motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-1: 120ms;
+  --dur-2: 200ms;
+  --dur-3: 320ms;
+  --dur-4: 520ms;
+  --stagger: 40ms;
+
+  /* layout */
+  --sidebar-w: 248px;
+  --sidebar-w-collapsed: 68px;
+  --topbar-h: 56px;
+  --page-max: 1480px;
+
+  /* accent: --accent and --accent-contrast are set at runtime by ThemeProvider */
+  --accent: #5b5bd6;
+  --accent-contrast: #ffffff;
+  --accent-hover: color-mix(in oklab, var(--accent) 86%, black);
+  --accent-soft: color-mix(in oklab, var(--accent) 11%, var(--surface));
+  --accent-soft-hover: color-mix(in oklab, var(--accent) 18%, var(--surface));
+  --accent-border: color-mix(in oklab, var(--accent) 45%, var(--border));
+  --accent-text: color-mix(in oklab, var(--accent) 80%, var(--text));
+  --focus-ring: 0 0 0 3px color-mix(in oklab, var(--accent) 32%, transparent);
+
+  /* status shades derive from the base status colors of the active theme */
+  --success-soft: color-mix(in oklab, var(--success) 12%, var(--surface));
+  --success-border: color-mix(in oklab, var(--success) 35%, var(--border));
+  --warning-soft: color-mix(in oklab, var(--warning) 13%, var(--surface));
+  --warning-border: color-mix(in oklab, var(--warning) 35%, var(--border));
+  --danger-soft: color-mix(in oklab, var(--danger) 11%, var(--surface));
+  --danger-border: color-mix(in oklab, var(--danger) 38%, var(--border));
+  --info-soft: color-mix(in oklab, var(--info) 11%, var(--surface));
+  --info-border: color-mix(in oklab, var(--info) 35%, var(--border));
+}
+
+/* ---------- themes ---------- */
+
+:root,
+[data-theme='light'] {
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --surface-2: #f9fafb;
+  --surface-hover: #f2f4f7;
+  --surface-sunken: #eef0f3;
+  --border: #e4e7ec;
+  --border-strong: #d0d5dd;
+  --text: #101828;
+  --text-2: #475467;
+  --text-3: #8a94a6;
+  --success: #12875a;
+  --warning: #b54708;
+  --danger: #d92d20;
+  --info: #1570ef;
+  --scrim: rgb(16 24 40 / 0.42);
+  --shadow-xs: 0 1px 2px rgb(16 24 40 / 0.05);
+  --shadow-sm: 0 1px 3px rgb(16 24 40 / 0.06), 0 1px 2px rgb(16 24 40 / 0.04);
+  --shadow-md: 0 6px 16px -4px rgb(16 24 40 / 0.08), 0 2px 4px -2px rgb(16 24 40 / 0.04);
+  --shadow-lg: 0 16px 32px -8px rgb(16 24 40 / 0.14), 0 4px 8px -4px rgb(16 24 40 / 0.05);
+  --shadow-xl: 0 28px 64px -12px rgb(16 24 40 / 0.26);
+  --code-key: #7a3fc4;
+  --code-string: #0e7a52;
+  --code-number: #b54708;
+  --code-literal: #1570ef;
+  --sidebar-bg: #fbfbfc;
+}
+
+[data-theme='dark'] {
+  --bg: #0c0e12;
+  --surface: #14171c;
+  --surface-2: #181b21;
+  --surface-hover: #1e222a;
+  --surface-sunken: #101317;
+  --border: #252a33;
+  --border-strong: #333944;
+  --text: #ebeef3;
+  --text-2: #a9b1bf;
+  --text-3: #6e7787;
+  --success: #3ccb8a;
+  --warning: #f5a524;
+  --danger: #f2655a;
+  --info: #5b9bff;
+  --scrim: rgb(0 0 0 / 0.6);
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.45);
+  --shadow-md: 0 6px 16px -4px rgb(0 0 0 / 0.55);
+  --shadow-lg: 0 16px 32px -8px rgb(0 0 0 / 0.6);
+  --shadow-xl: 0 28px 64px -12px rgb(0 0 0 / 0.7);
+  --code-key: #c49bff;
+  --code-string: #6fdcaa;
+  --code-number: #ffb86b;
+  --code-literal: #7cb3ff;
+  --sidebar-bg: #101317;
+  --accent-hover: color-mix(in oklab, var(--accent) 85%, white);
+  --accent-soft: color-mix(in oklab, var(--accent) 18%, var(--surface));
+  --accent-soft-hover: color-mix(in oklab, var(--accent) 26%, var(--surface));
+  --accent-text: color-mix(in oklab, var(--accent) 65%, white);
+}
+
+/* ---------- density ---------- */
+[data-density='compact'] { --density: 0.82; }
+[data-density='spacious'] { --density: 1.18; }
+
+/* ---------- corners ---------- */
+[data-radius='sharp'] { --radius-scale: 0.35; }
+[data-radius='soft'] { --radius-scale: 1.6; }
+
+/* ---------- font ---------- */
+[data-font='system'] { --font-sans: var(--font-system); }
+[data-font='mono'] { --font-sans: var(--font-mono); }
+
+/* ---------- motion ---------- */
+[data-motion='reduced'] {
+  --dur-1: 0ms; --dur-2: 0ms; --dur-3: 0ms; --dur-4: 0ms; --stagger: 0ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-motion='system'] {
+    --dur-1: 0ms; --dur-2: 0ms; --dur-3: 0ms; --dur-4: 0ms; --stagger: 0ms;
+  }
+}

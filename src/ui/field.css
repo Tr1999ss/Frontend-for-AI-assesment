@@ -1,0 +1,41 @@
+.field { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
+.field-top { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+.field-label { font-size: var(--text-sm); font-weight: 560; color: var(--text); }
+.field-required { margin-left: 3px; color: var(--danger); }
+.field-trailing { font-size: var(--text-xs); color: var(--text-3); }
+.field-message { font-size: var(--text-xs); color: var(--text-3); line-height: 1.45; }
+.field-message.is-error { color: var(--danger); animation: rise-in var(--dur-2) var(--ease-out); }
+
+.control {
+  width: 100%;
+  min-height: var(--control-h);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-xs);
+  font: inherit;
+  font-size: var(--text-base);
+  transition: border-color var(--dur-1) var(--ease-out), box-shadow var(--dur-2) var(--ease-out), background-color var(--dur-1);
+}
+.control::placeholder { color: var(--text-3); }
+.control:hover:not(:disabled):not(:focus) { border-color: color-mix(in oklab, var(--border-strong) 55%, var(--text-3)); }
+.control:focus { outline: none; border-color: var(--accent); box-shadow: var(--focus-ring); }
+.control:disabled { background: var(--surface-sunken); color: var(--text-3); cursor: not-allowed; }
+.control[aria-invalid='true'] { border-color: var(--danger); }
+.control[aria-invalid='true']:focus { box-shadow: 0 0 0 3px color-mix(in oklab, var(--danger) 25%, transparent); }
+
+textarea.control { padding: var(--space-2) var(--space-3); line-height: 1.6; resize: vertical; min-height: calc(var(--control-h) * 2.2); }
+textarea.control.is-autogrow { resize: none; overflow-y: auto; min-height: var(--control-h); }
+.control.mono, .mono .control { font-family: var(--font-mono); font-size: var(--text-sm); }
+
+.control-wrap { position: relative; display: flex; align-items: center; min-width: 0; }
+.control-icon { position: absolute; left: var(--space-3); display: flex; color: var(--text-3); pointer-events: none; }
+.control-icon svg { width: 16px; height: 16px; }
+.control-wrap.has-icon .control { padding-left: calc(var(--space-3) + 24px); }
+.control-trailing { position: absolute; right: 4px; display: flex; align-items: center; }
+.control-wrap.has-trailing .control { padding-right: calc(var(--control-h) + 4px); }
+
+select.control { appearance: none; padding-right: calc(var(--space-3) + 22px); cursor: pointer; }
+.select-chevron { position: absolute; right: var(--space-3); color: var(--text-3); pointer-events: none; }

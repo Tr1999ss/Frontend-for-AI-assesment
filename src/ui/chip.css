@@ -1,0 +1,54 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: calc(var(--control-h-sm) + 2px);
+  padding: 0 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--dur-1), border-color var(--dur-1), color var(--dur-1), transform var(--dur-1) var(--ease-out);
+}
+.chip:hover { background: var(--surface-hover); color: var(--text); }
+.chip:active { transform: scale(0.96); }
+.chip.is-selected { background: var(--accent-soft); border-color: var(--accent-border); color: var(--accent-text); }
+.chip-marker {
+  display: grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  margin-left: -6px;
+  padding: 0 4px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 0.68rem;
+  font-weight: 700;
+  animation: scale-in var(--dur-2) var(--ease-spring);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  font-size: var(--text-xs);
+  font-weight: 520;
+  white-space: nowrap;
+}
+.tag.is-emphasis { background: var(--accent-soft); border-color: var(--accent-border); color: var(--accent-text); }
+.tag-remove {
+  display: grid; place-items: center;
+  width: 16px; height: 16px; margin-right: -4px; padding: 0;
+  border: none; border-radius: var(--radius-xs); background: none; color: inherit; cursor: pointer; opacity: 0.6;
+}
+.tag-remove:hover { opacity: 1; background: color-mix(in oklab, currentColor 14%, transparent); }

@@ -1,0 +1,28 @@
+.alert {
+  --alert-color: var(--info);
+  --alert-bg: var(--info-soft);
+  --alert-border: var(--info-border);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--alert-border);
+  border-radius: var(--radius-md);
+  background: var(--alert-bg);
+  font-size: var(--text-sm);
+  animation: rise-in var(--dur-3) var(--ease-out);
+}
+.alert-success { --alert-color: var(--success); --alert-bg: var(--success-soft); --alert-border: var(--success-border); }
+.alert-warning { --alert-color: var(--warning); --alert-bg: var(--warning-soft); --alert-border: var(--warning-border); }
+.alert-danger { --alert-color: var(--danger); --alert-bg: var(--danger-soft); --alert-border: var(--danger-border); }
+.alert-neutral { --alert-color: var(--text-2); --alert-bg: var(--surface-2); --alert-border: var(--border); }
+.alert-accent { --alert-color: var(--accent-text); --alert-bg: var(--accent-soft); --alert-border: var(--accent-border); }
+.alert-icon { flex-shrink: 0; margin-top: 1px; color: var(--alert-color); }
+.alert-title { font-weight: 600; color: var(--text); }
+.alert-body { color: var(--text-2); overflow-wrap: anywhere; }
+.alert-title + .alert-body { margin-top: 2px; }
+.alert-dismiss {
+  display: grid; place-items: center; width: 22px; height: 22px; padding: 0;
+  border: none; border-radius: var(--radius-sm); background: none; color: var(--text-3); cursor: pointer;
+}
+.alert-dismiss:hover { color: var(--text); background: color-mix(in oklab, var(--alert-color) 12%, transparent); }

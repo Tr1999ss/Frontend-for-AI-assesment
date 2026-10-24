@@ -1,0 +1,35 @@
+.user-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--control-h);
+  padding: 0 var(--space-2) 0 3px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  background: none;
+  cursor: pointer;
+  transition: background-color var(--dur-1), border-color var(--dur-1);
+}
+.user-trigger:hover, .user-trigger[aria-expanded='true'] { background: var(--surface-hover); border-color: var(--border); }
+.user-trigger-name { font-size: var(--text-sm); font-weight: 560; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), color-mix(in oklab, var(--accent) 55%, #ff7ab6));
+  color: var(--accent-contrast);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.avatar-lg { width: 40px; height: 40px; font-size: var(--text-sm); }
+
+.user-panel { display: flex; flex-direction: column; gap: var(--space-3); min-width: 260px; }
+.user-panel-head { display: flex; align-items: center; gap: var(--space-3); }
+.user-panel-name { font-weight: 620; }
+
+@media (max-width: 640px) { .user-trigger-name { display: none; } }

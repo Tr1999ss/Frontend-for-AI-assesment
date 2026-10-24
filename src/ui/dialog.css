@@ -1,0 +1,54 @@
+.dialog {
+  --dialog-w: 520px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-xl);
+  width: min(var(--dialog-w), calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  overflow: hidden;
+}
+.dialog[open] { display: flex; flex-direction: column; animation: scale-in var(--dur-3) var(--ease-out); }
+.dialog[data-closing] { animation: scale-out var(--dur-2) var(--ease-in) forwards; }
+.dialog::backdrop { background: var(--scrim); backdrop-filter: blur(6px); animation: fade-in var(--dur-3) var(--ease-out); }
+.dialog[data-closing]::backdrop { animation: fade-out var(--dur-2) var(--ease-in) forwards; }
+.dialog-sm { --dialog-w: 420px; }
+.dialog-lg { --dialog-w: 760px; }
+
+.dialog-sheet {
+  --dialog-w: 440px;
+  margin: 0 0 0 auto;
+  height: 100dvh;
+  max-height: 100dvh;
+  border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+  border-right: none;
+}
+.dialog-sheet[open] { animation: slide-in-right var(--dur-4) var(--ease-out); }
+.dialog-sheet[data-closing] { animation: slide-out-right var(--dur-3) var(--ease-in) forwards; }
+
+.dialog-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-5) var(--space-4);
+}
+.dialog-icon {
+  display: grid; place-items: center; flex-shrink: 0;
+  width: 38px; height: 38px; border-radius: var(--radius-md);
+  background: var(--accent-soft); color: var(--accent-text);
+}
+.dialog-icon svg { width: 19px; height: 19px; }
+.dialog-destructive .dialog-icon { background: var(--danger-soft); color: var(--danger); }
+.dialog-title { font-size: var(--text-lg); }
+.dialog-description { margin-top: 4px; font-size: var(--text-sm); color: var(--text-3); }
+.dialog-body { flex: 1; min-height: 0; overflow-y: auto; padding: 0 var(--space-5) var(--space-5); }
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+}

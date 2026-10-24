@@ -1,0 +1,6 @@
+.health-trigger { display: inline-flex; padding: 0; border: none; background: none; border-radius: var(--radius-full); cursor: pointer; }
+.health-panel { display: flex; flex-direction: column; gap: var(--space-3); min-width: 260px; }
+.health-panel-head { display: flex; align-items: center; gap: var(--space-2); font-weight: 600; }
+.health-error { color: var(--danger); overflow-wrap: anywhere; }
+.health-components { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.health-components li { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); color: var(--text-2); }
