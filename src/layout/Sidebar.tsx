@@ -1,5 +1,5 @@
 import { Lock, PanelLeftClose, PanelLeftOpen, Settings } from 'lucide-react'
-import { groupBySection, ROUTES, type RouteDefinition } from '../app/routes'
+import { canOpen, groupBySection, navRoutes, ROUTES, type RouteDefinition } from '../app/routes'
 import { useAuth } from '../auth/AuthProvider'
 import { APP_NAME, BACKEND_URL } from '../config'
 import { cx } from '../lib/cx'
@@ -14,10 +14,7 @@ interface SidebarProps {
 
 export function Sidebar({ current, collapsed, onToggleCollapsed, onOpenSettings, onNavigate }: SidebarProps) {
   const { status, hasRole } = useAuth()
-  const canOpen = (route: RouteDefinition) =>
-    route.access === 'public' ||
-    status === 'loading' ||
-    (status === 'authenticated' && (route.access === 'authenticated' || hasRole(route.access)))
+  const viewer = { status, hasRole }
 
   return (
     <aside className="sidebar" aria-label="Main navigation">
@@ -32,7 +29,7 @@ export function Sidebar({ current, collapsed, onToggleCollapsed, onOpenSettings,
       </div>
 
       <nav className="sidebar-nav">
-        {groupBySection(ROUTES).map(([section, routes]) => (
+        {groupBySection(navRoutes(ROUTES, viewer)).map(([section, routes]) => (
           <div key={section} className="sidebar-group">
             <div className="sidebar-section sidebar-reveal">{section}</div>
             {routes.map((route) => {
@@ -49,7 +46,7 @@ export function Sidebar({ current, collapsed, onToggleCollapsed, onOpenSettings,
                 >
                   <Icon className="sidebar-link-icon" />
                   <span className="sidebar-reveal grow">{route.label}</span>
-                  {!canOpen(route) && <Lock className="sidebar-lock sidebar-reveal" aria-label="Requires sign-in or a role" />}
+                  {!canOpen(route, viewer) && <Lock className="sidebar-lock sidebar-reveal" aria-label="Requires sign-in or a role" />}
                 </a>
               )
             })}

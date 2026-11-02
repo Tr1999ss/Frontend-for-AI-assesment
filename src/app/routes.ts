@@ -1,5 +1,7 @@
 import { lazy, type ComponentType, type LazyExoticComponent } from 'react'
-import { FlaskConical, MessageSquare, MessagesSquare, Search, Tags, UploadCloud, Wrench, type LucideIcon } from 'lucide-react'
+import { FlaskConical, MessageSquare, MessagesSquare, Network, Search, Tags, Trophy, UploadCloud, Wrench, type LucideIcon } from 'lucide-react'
+import type { AuthStatus } from '../auth/AuthProvider'
+import type { Role } from '../auth/config'
 import type { Access } from '../auth/RequireRole'
 
 export interface RouteDefinition {
@@ -15,6 +17,8 @@ export interface RouteDefinition {
   component: LazyExoticComponent<ComponentType>
   /** 'full' pages get the whole viewport below the top bar (no max width, no page padding) */
   layout?: 'default' | 'full'
+  /** leave the page out of the sidebar for users who can't open it, instead of showing it locked */
+  hideWhenLocked?: boolean
 }
 
 /** Lazy-loads a named export so each page (and its dependencies) is its own chunk. */
@@ -89,9 +93,48 @@ export const ROUTES: RouteDefinition[] = [
     access: 'kb-admin',
     component: page(() => import('../features/evaluation/EvaluationPage'), 'EvaluationPage'),
   },
+  {
+    id: 'race',
+    label: 'Agent race',
+    description: 'Single agent vs agent team: latency, cost and answer quality',
+    icon: Trophy,
+    section: 'Agents',
+    access: 'kb-admin',
+    hideWhenLocked: true,
+    component: page(() => import('../features/race/RacePage'), 'RacePage'),
+  },
+  {
+    id: 'a2a',
+    label: 'A2A',
+    description: 'Agent card and task console for the agent-to-agent specialist',
+    icon: Network,
+    section: 'Agents',
+    access: 'kb-admin',
+    hideWhenLocked: true,
+    component: page(() => import('../features/a2a/A2aPage'), 'A2aPage'),
+  },
 ]
 
 export const DEFAULT_ROUTE = ROUTES[0]
+
+export interface RouteViewer {
+  status: AuthStatus
+  hasRole: (role: Role) => boolean
+}
+
+/** May this viewer open the page? While sign-in is still resolving, pages count as open so nothing flickers locked. */
+export function canOpen(route: RouteDefinition, { status, hasRole }: RouteViewer): boolean {
+  return (
+    route.access === 'public' ||
+    status === 'loading' ||
+    (status === 'authenticated' && (route.access === 'authenticated' || hasRole(route.access)))
+  )
+}
+
+/** Sidebar entries for this viewer. hideWhenLocked pages appear only once the viewer is known to hold the role. */
+export function navRoutes(routes: RouteDefinition[], viewer: RouteViewer): RouteDefinition[] {
+  return routes.filter((r) => !r.hideWhenLocked || (viewer.status === 'authenticated' && canOpen(r, viewer)))
+}
 
 export function groupBySection(routes: RouteDefinition[]): [string, RouteDefinition[]][] {
   const groups = new Map<string, RouteDefinition[]>()
