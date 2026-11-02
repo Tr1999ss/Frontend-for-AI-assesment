@@ -260,6 +260,135 @@ export interface EvaluationReport {
   results: EvaluationConfigResult[]
 }
 
+// ---------- single vs team agent race (POST /api/admin/race) ----------
+
+/** com.shk.generic.retrieval.agent.RaceService.RaceRequest; every field falls back to a server default */
+export interface RaceRequest {
+  /** interleaved runs per question (default 3) */
+  repetitions?: number
+  /** score answers with the LLM judge (default true) */
+  useJudge?: boolean
+  /** ingest eval/corpus first (default false) */
+  seedCorpus?: boolean
+  /** run only the first n questions */
+  limitQuestions?: number
+}
+
+export type RaceArm = 'single' | 'team'
+
+/** RaceReport.ArmSummary: one arm aggregated over a set of runs */
+export interface RaceArmSummary {
+  arm: RaceArm
+  totalRuns: number
+  /** 0..1 */
+  factPresenceRate: number
+  /** 0..1 */
+  sourceRecallRate: number
+  /** 1..5 averaged over judged runs; 0 when nothing was judged */
+  avgJudgeScore: number
+  medianLatencyMs: number
+  p95LatencyMs: number
+  avgInputTokens: number
+  avgOutputTokens: number
+  avgTotalTokens: number
+  avgCostUsd: number
+  totalCostUsd: number
+  avgHandoffTokens: number
+}
+
+/** RaceReport.TypeComparison */
+export interface RaceTypeComparison {
+  type: string
+  questionCount: number
+  single: RaceArmSummary
+  team: RaceArmSummary
+}
+
+/** RaceReport.RunMetrics: one repetition of one question by one arm */
+export interface RaceRunMetrics {
+  repetition: number
+  latencyMs: number
+  inputTokens: number
+  outputTokens: number
+  costUsd: number
+  factScore: number
+  sourceScore: number
+  /** 1..5; 0 when the judge was off, the run aborted or the answer was blank */
+  judgeScore: number
+  judgeReason: string
+  aborted: boolean
+  /** first 150 characters of the answer */
+  answerSummary: string
+  handoffTokens: number
+}
+
+/** RaceReport.QuestionResult */
+export interface RaceQuestionResult {
+  questionId: string
+  /** "simple" | "two-part" | "broad" */
+  type: string
+  question: string
+  singleRuns: RaceRunMetrics[]
+  teamRuns: RaceRunMetrics[]
+  singleSummary: RaceArmSummary
+  teamSummary: RaceArmSummary
+}
+
+/** com.shk.generic.retrieval.agent.RaceReport */
+export interface RaceReport {
+  raceName: string
+  /** ISO-8601 instant */
+  timestamp: string
+  agentModel: string
+  judgeModel: string
+  totalQuestions: number
+  repetitions: number
+  overallSingle: RaceArmSummary
+  overallTeam: RaceArmSummary
+  /** keyed by question type, in the order simple, two-part, broad */
+  byType: Record<string, RaceTypeComparison>
+  questionResults: RaceQuestionResult[]
+  markdownTable: string
+}
+
+// ---------- A2A (agent-to-agent) ----------
+
+/** com.shk.generic.retrieval.agent.a2a.AgentCard (GET /.well-known/agent-card.json) */
+export interface AgentCard {
+  name: string
+  description: string
+  url: string
+  version: string
+  capabilities?: Record<string, unknown>
+  skills?: AgentSkill[]
+  defaultInputModes?: string[]
+  defaultOutputModes?: string[]
+}
+
+export interface AgentSkill {
+  id: string
+  name: string
+  description: string
+  tags?: string[]
+}
+
+/** com.shk.generic.retrieval.agent.a2a.TaskState */
+export type A2aTaskState = 'submitted' | 'working' | 'completed' | 'failed'
+
+/** com.shk.generic.retrieval.agent.a2a.A2aTask; null fields are omitted */
+export interface A2aTask {
+  id: string
+  state: A2aTaskState
+  input: string
+  output?: string
+  inputTokens: number
+  outputTokens: number
+  latencyMs: number
+  error?: string
+  createdAt: string
+  completedAt?: string
+}
+
 // ---------- documentation viewer (GET /api/docs) ----------
 
 /** A page (slug and path set) or a section grouping pages. */

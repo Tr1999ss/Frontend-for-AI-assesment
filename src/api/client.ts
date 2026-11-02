@@ -1,4 +1,6 @@
 import type {
+  A2aTask,
+  AgentCard,
   Answer,
   AskRequest,
   Category,
@@ -9,6 +11,8 @@ import type {
   EvaluationRequest,
   IngestionResult,
   ProblemDetail,
+  RaceReport,
+  RaceRequest,
   RetrievalCatalog,
   SearchParams,
   SearchResult,
@@ -123,5 +127,16 @@ export const api = {
     remove: (name: string) => request<void>(`/api/admin/categories/${encodeURIComponent(name)}`, { method: 'DELETE' }),
     /** synchronous; LLM-heavy configurations can take minutes */
     evaluate: (body: EvaluationRequest) => request<EvaluationReport>('/api/admin/evaluation', json('POST', body)),
+    /** synchronous; every question runs both agents per repetition, so expect minutes. Aborting stops waiting, not the race. */
+    race: (body: RaceRequest, signal?: AbortSignal) => request<RaceReport>('/api/admin/race', { ...json('POST', body), signal }),
+    /** the report the last finished race saved; undefined (204) before the first race */
+    latestRace: () => request<RaceReport | undefined>('/api/admin/race/latest'),
+  },
+
+  a2a: {
+    agentCard: () => request<AgentCard>('/.well-known/agent-card.json'),
+    /** the backend runs the task before answering, so the result is usually already completed or failed */
+    createTask: (input: string, signal?: AbortSignal) => request<A2aTask>('/api/a2a/tasks', { ...json('POST', { input }), signal }),
+    getTask: (id: string, signal?: AbortSignal) => request<A2aTask>(`/api/a2a/tasks/${encodeURIComponent(id)}`, { signal }),
   },
 }

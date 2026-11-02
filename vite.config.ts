@@ -22,6 +22,8 @@ export default defineConfig(({ mode }) => {
         // MCP: streamable HTTP lives at /mcp, the SSE transport at /sse + /mcp/message
         '/mcp': toBackend,
         '/sse': toBackend,
+        // A2A agent card discovery (public)
+        '/.well-known': toBackend,
         // Keycloak token/userinfo/certs endpoints (see src/auth/oidc.ts)
         '/realms': { target: keycloak, changeOrigin: true },
       },
