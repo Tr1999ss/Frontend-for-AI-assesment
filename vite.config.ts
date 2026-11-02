@@ -33,6 +33,8 @@ export default defineConfig(({ mode }) => {
       include: ['src/**/*.test.{ts,tsx}'],
       restoreMocks: true,
       unstubGlobals: true,
+      // the first test to render Markdown pays for loading react-markdown and remark, slow on a busy machine
+      testTimeout: 20_000,
     },
   }
 })
