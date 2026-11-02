@@ -11,11 +11,28 @@ React 19 + Vite + TypeScript console for the Spring Boot knowledge-base backend 
 | Model chat  | `GET /api/chat`                                               | signed in         |
 | Categories  | `GET /api/categories`; `/api/admin/categories` CRUD           | public / `kb-admin` |
 | Evaluation  | `POST /api/admin/evaluation`                                  | `kb-admin`        |
+| Agent race  | `POST /api/admin/race`, `GET /api/admin/race/latest`          | `kb-admin`        |
+| A2A         | `GET /.well-known/agent-card.json` (public), `POST /api/a2a/tasks`, `GET /api/a2a/tasks/{id}` | `kb-admin` |
 
 Search and Ask build their strategy controls (mode, query transform, rerank, MMR, candidate pool,
 explain) from `GET /api/search/modes`, so options the backend can't run (e.g. Cohere without a key)
 show as disabled with the reason. Scores are drawn per `scoreType`: COSINE / FTS_RANK / RERANK as
 absolute 0..1, BM25 / RRF relative to the best hit, since types aren't comparable.
+
+**Agent race** runs the single agent against the agent team (manager + two specialists) and shows
+median/p95 latency, tokens, cost, judge score, fact coverage and source recall overall, per question
+type and per question repetition (with the judge's reason). The backend answers only when the whole race is
+done, so the page shows elapsed time. Cancel and the timeout stop the browser waiting, but the server finishes
+the race and saves it. **Load saved result** reads it back. On open, the page shows the last saved race.
+
+**A2A** shows the specialist's public agent card and a task console. A task is submitted, then `tasks/get` is
+polled until it is `completed` or `failed`. The backend currently runs the task before answering the POST, so
+the first response is usually already final. Recent tasks are kept in the browser. The backend keeps tasks in
+memory, so they disappear when it restarts.
+
+Both pages are hidden from the sidebar unless the signed-in user has `kb-admin`. A direct link shows the
+no-access screen. API errors on these pages show a **Sign in again** prompt on 401 and an **Admin only**
+notice on 403.
 
 ## Run
 
@@ -30,10 +47,20 @@ npm install
 npm run dev     # http://localhost:5173
 ```
 
+## Check
+
+```sh
+npm run typecheck   # tsc -b
+npm test            # vitest (jsdom): API client, role gating, race and A2A pages
+npm run build       # type-check + production bundle
+```
+
+There is no linter configured in this project.
+
 Sign in with the dev users from `docker/keycloak/generic-realm.json`:
 `alice/alice` (reader), `bob/bob` (editor), `carol/carol` (admin).
 
-The dev server proxies `/api`, `/actuator`, `/mcp`, `/sse` to `BACKEND_URL` and `/realms` to Keycloak,
+The dev server proxies `/api`, `/actuator`, `/mcp`, `/sse`, `/.well-known` to `BACKEND_URL` and `/realms` to Keycloak,
 so neither needs CORS. Settings live in `.env`; override them in `.env.local`.
 
 ## Structure
@@ -48,13 +75,15 @@ src/
   layout/       shell: sidebar, top bar, appearance settings
   components/   app-level building blocks (Markdown, conversation, error handling)
   features/     one folder per page: its components, hooks and CSS
-  lib/          hooks, storage, formatting helpers
+  lib/          hooks, storage, formatting, abort/timeout helpers
+  test/         DOM test helpers and fixtures (tests sit next to the code as *.test.ts[x])
 ```
 
 ## Extending
 
 - **New page:** add one entry to `ROUTES` in `src/app/routes.ts` (label, icon, section, `access`,
   lazy component). The sidebar, breadcrumbs, role gating and code splitting follow from that entry.
+  Set `hideWhenLocked: true` to leave the page out of the sidebar for users who can't open it.
 - **New theme option:** add the choice to `src/theme/themes.ts` and a `[data-*]` block to
   `src/theme/tokens.css`. Components only use semantic tokens, so nothing else changes.
 - **New accent color:** append to `ACCENT_PRESETS`; every accent shade derives from the one value.
