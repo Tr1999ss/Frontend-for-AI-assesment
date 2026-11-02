@@ -194,7 +194,7 @@ function rewriteLinks(tree: Root, ctx: RenderContext, broken: BrokenLink[]) {
 
     switch (target.kind) {
       case 'external':
-        node.properties = { ...node.properties, target: '_blank', rel: 'noopener noreferrer', className: ['doc-external'] }
+        node.properties = { ...node.properties, target: '_blank', rel: ['noopener', 'noreferrer'], className: ['doc-external'] }
         break
       case 'anchor':
         if (!ownHeadings.has(target.section)) markBroken('No such section on this page')
