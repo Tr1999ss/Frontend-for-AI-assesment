@@ -1,0 +1,67 @@
+.race-layout { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: var(--space-5); align-items: start; }
+.race-form-card { position: sticky; top: var(--space-5); }
+@media (max-width: 1080px) {
+  .race-layout { grid-template-columns: minmax(0, 1fr); }
+  .race-form-card { position: static; }
+}
+.race-results { display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; }
+.race-timer { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-mono); font-size: var(--text-sm); font-weight: 600; }
+.race-stale { opacity: 0.55; pointer-events: none; transition: opacity var(--dur-2); }
+
+/* summary cards: Single vs Team per metric, as paired CSS bars */
+.race-summary { display: flex; flex-direction: column; gap: var(--space-2); }
+.race-summary-title { margin: 0; font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-3); }
+.race-summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: var(--space-3); }
+.race-card { display: flex; flex-direction: column; gap: var(--space-3); }
+.race-card-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+.race-card-label { margin: 0; font-size: var(--text-sm); font-weight: 600; }
+.race-arms { display: flex; flex-direction: column; gap: var(--space-2); margin: 0; }
+.race-arm { display: grid; grid-template-columns: 48px minmax(0, 1fr); align-items: center; gap: var(--space-2); }
+.race-arm dt { font-size: var(--text-xs); color: var(--text-2); }
+.race-arm dd { display: flex; flex-direction: column; gap: 3px; margin: 0; }
+.race-arm-value { font-variant-numeric: tabular-nums; font-weight: 600; }
+.race-arm.is-best .race-arm-value { color: var(--success); }
+.race-bar { height: 6px; border-radius: var(--radius-full); background: var(--surface-sunken); overflow: hidden; }
+.race-bar span { display: block; height: 100%; width: var(--pct); border-radius: inherit; animation: race-grow var(--dur-4) var(--ease-out) both; }
+.race-arm.is-single .race-bar span { background: var(--text-3); }
+.race-arm.is-team .race-bar span { background: var(--accent); }
+.race-change { margin: 0; }
+@keyframes race-grow { from { width: 0; } }
+
+.race-table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+.race-table th {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.race-table td { padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--border); vertical-align: top; }
+.race-table tbody tr:last-child td { border-bottom: none; }
+.race-table .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.race-table th.race-type-cell {
+  background: none;
+  text-transform: none;
+  letter-spacing: 0;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+.race-type { display: block; font-size: var(--text-sm); font-weight: 600; color: var(--text); }
+.race-table tr:not(.race-pair-end) td { border-bottom-style: dashed; }
+.race-better { color: var(--success); font-weight: 650; }
+.race-table-compact td, .race-table-compact th { padding: 6px var(--space-3); }
+.race-table tr.is-aborted td { background: color-mix(in oklab, var(--danger-soft) 60%, transparent); }
+.race-aborted { margin-left: 6px; }
+.race-reason { min-width: 260px; max-width: 520px; }
+.race-answer { margin-top: 2px; font-style: italic; }
+
+.race-question .disclosure-summary { display: flex; width: 100%; color: var(--text); }
+.race-question-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 6px var(--space-2); min-width: 0; flex: 1; text-align: left; }
+.race-qid { font-weight: 600; }
+.race-question-text { flex: 1 1 240px; min-width: 0; }
+.race-question-scores { display: inline-flex; align-items: center; gap: 4px; color: var(--text-3); }
