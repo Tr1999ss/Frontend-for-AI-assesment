@@ -39,12 +39,22 @@ export function isSigninCallback(): boolean {
   return params.has('state') && (params.has('code') || params.has('error'))
 }
 
-/** Completes the redirect, then strips ?code=&state= while keeping the hash route. */
-export async function completeSignin(): Promise<User> {
-  const user = await userManager.signinRedirectCallback()
-  const state = user.state as { hash?: string } | undefined
-  window.history.replaceState(null, '', `${window.location.pathname}${state?.hash ?? window.location.hash}`)
-  return user
+let signin: Promise<User> | null = null
+
+/**
+ * Completes the redirect, then strips ?code=&state= and returns to the page sign-in started from.
+ * Runs once per page load: an authorization code can be exchanged only once, and StrictMode runs
+ * effects twice in development, which made the second exchange fail and sign the user back out.
+ */
+export function completeSignin(): Promise<User> {
+  signin ??= userManager.signinRedirectCallback().then((user) => {
+    const state = user.state as { hash?: string } | undefined
+    window.history.replaceState(null, '', `${window.location.pathname}${state?.hash ?? window.location.hash}`)
+    // replaceState fires no hashchange, so tell the router the page changed
+    window.dispatchEvent(new HashChangeEvent('hashchange'))
+    return user
+  })
+  return signin
 }
 
 /** Realm roles from Keycloak's access token claim realm_access.roles. */
