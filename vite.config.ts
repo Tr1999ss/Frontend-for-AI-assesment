@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -24,6 +25,12 @@ export default defineConfig(({ mode }) => {
         // Keycloak token/userinfo/certs endpoints (see src/auth/oidc.ts)
         '/realms': { target: keycloak, changeOrigin: true },
       },
+    },
+    test: {
+      environment: 'jsdom',
+      include: ['src/**/*.test.{ts,tsx}'],
+      restoreMocks: true,
+      unstubGlobals: true,
     },
   }
 })
